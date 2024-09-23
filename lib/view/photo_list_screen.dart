@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'dart:developer' as developer;
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -11,6 +12,8 @@ import 'package:photoapp/view/photo_view_screen.dart';
 import 'package:photoapp/view/sign_in_screen.dart';
 
 class PhotoListScreen extends ConsumerStatefulWidget {
+  const PhotoListScreen({super.key});
+
   @override
   _PhotoListScreenState createState() => _PhotoListScreenState();
 }
@@ -25,7 +28,7 @@ class _PhotoListScreenState extends ConsumerState<PhotoListScreen> {
   }
 
   void _onPageChanged(int index) {
-    //TODO: これどこの操作を表してる？？
+    //XXX: これどこの操作を表してる？？
     ref.read(photoListIndexProvider.notifier).state = index;
   }
 
@@ -37,21 +40,23 @@ class _PhotoListScreenState extends ConsumerState<PhotoListScreen> {
   }
 
   void _onTapPhoto(Photo photo, List<Photo> photoList) {
-    // TODO: あとでこの処理理解する
+    // XXX: この処理理解する
     final initialIndex = photoList.indexOf(photo);
     //最初に表示する画像のURLを指定して、画像詳細画面に切り替え
     Navigator.of(context).push(MaterialPageRoute(
         builder: (_) => ProviderScope(overrides: [
               photoViewInitialIndexProvider.overrideWithValue(initialIndex)
-            ], child: PhotoViewScreen())));
+            ], child: const PhotoViewScreen())));
   }
 
   Future<void> _onSignOut() async {
     await FirebaseAuth.instance.signOut();
     //ログアウトに成功したらログイン画面に戻る
-    Navigator.of(context).pushReplacement(MaterialPageRoute(
-      builder: (_) => SignInScreen(),
-    ));
+    if (context.mounted) {
+      Navigator.of(context).pushReplacement(MaterialPageRoute(
+        builder: (_) => SignInScreen(),
+      ));
+    }
   }
 
   Future<void> _onAddPhoto() async {
@@ -82,12 +87,11 @@ class _PhotoListScreenState extends ConsumerState<PhotoListScreen> {
         title: Row(
           children: [
             const Text("Photo App"),
-            SizedBox(width: 10,),
+            const SizedBox(width: 10),
             Expanded(
               child: Padding(
                 padding: const EdgeInsets.only(right: 16.0),
-                child: Text(
-                    FirebaseAuth.instance.currentUser?.email ?? "ゲスト",
+                child: Text(FirebaseAuth.instance.currentUser?.email ?? "ゲスト",
                     overflow: TextOverflow.ellipsis, //テキストが幅を超えるとき省略記号を示す
                     maxLines: 1,
                     textAlign: TextAlign.right,
@@ -171,15 +175,15 @@ class PhotoGridView extends StatelessWidget {
   final void Function(Photo photo) onTapFav;
 
   const PhotoGridView({
-    Key? key,
+    super.key,
     required this.photoList,
     required this.onTap,
     required this.onTapFav,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
-    print('PhotoList length: ${photoList.length}');
+    developer.log('PhotoList length: ${photoList.length}');
     return GridView.count(
       crossAxisCount: 2,
       mainAxisSpacing: 8,
@@ -212,7 +216,7 @@ class PhotoGridView extends StatelessWidget {
             Align(
               alignment: Alignment.topRight,
               child: IconButton(
-                onPressed: () => onTapFav(photo), //TODO: お気に入りボタンを押した後の処理
+                onPressed: () => onTapFav(photo),
                 color: photo.isFavorite ? Colors.pink : Colors.white,
                 icon: photo.isFavorite
                     ? const Icon(Icons.favorite)
@@ -221,7 +225,7 @@ class PhotoGridView extends StatelessWidget {
             )
           ],
         );
-      }).toList(), //CHECK: なぜ？
+      }).toList(),
     );
   }
 }
