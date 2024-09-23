@@ -15,10 +15,10 @@ class PhotoListScreen extends ConsumerStatefulWidget {
   const PhotoListScreen({super.key});
 
   @override
-  _PhotoListScreenState createState() => _PhotoListScreenState();
+  PhotoListScreenState createState() => PhotoListScreenState();
 }
 
-class _PhotoListScreenState extends ConsumerState<PhotoListScreen> {
+class PhotoListScreenState extends ConsumerState<PhotoListScreen> {
   late PageController _controller;
 
   @override
@@ -51,10 +51,11 @@ class _PhotoListScreenState extends ConsumerState<PhotoListScreen> {
 
   Future<void> _onSignOut() async {
     await FirebaseAuth.instance.signOut();
+    if (!mounted) return;
     //ログアウトに成功したらログイン画面に戻る
     if (context.mounted) {
       Navigator.of(context).pushReplacement(MaterialPageRoute(
-        builder: (_) => SignInScreen(),
+        builder: (_) => const SignInScreen(),
       ));
     }
   }

@@ -6,14 +6,14 @@ import 'package:photoapp/providers.dart';
 
 class PhotoViewScreen extends ConsumerStatefulWidget {
   const PhotoViewScreen({
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
-  _PhotoViewScreenState createState() => _PhotoViewScreenState();
+  PhotoViewScreenState createState() => PhotoViewScreenState();
 }
 
-class _PhotoViewScreenState extends ConsumerState<PhotoViewScreen> {
+class PhotoViewScreenState extends ConsumerState<PhotoViewScreen> {
   late PageController _controller;
 
   @override
@@ -24,10 +24,10 @@ class _PhotoViewScreenState extends ConsumerState<PhotoViewScreen> {
   }
 
   //共有
+  // FIXME: build errorを引き起こす。javaのバージョンのせいか？
   Future<void> _onTapShare() async {
-    final photoList = ref.read(photoListProvider).value ??[];
+    final photoList = ref.read(photoListProvider).value ?? [];
     final photo = photoList[_controller.page!.toInt()];
-    //FIXME:  build errorを引き起こす。javaのバージョンのせいか？
     //await Share.share(photo.imageURL);
   }
 
@@ -36,11 +36,14 @@ class _PhotoViewScreenState extends ConsumerState<PhotoViewScreen> {
     final photoRepository = ref.read(photoRepositoryProvider);
     final photoList = ref.read(photoListProvider).value ?? [];
     final photo = photoList[_controller.page!.toInt()];
-    
-    if(photoList.length == 1){
+
+    if (photoList.length == 1) {
       Navigator.of(context).pop();
-    }else if(photoList.last == photo){
-      await _controller.previousPage(duration: const Duration(milliseconds: 300), curve: Curves.easeInOut,);
+    } else if (photoList.last == photo) {
+      await _controller.previousPage(
+        duration: const Duration(milliseconds: 300),
+        curve: Curves.easeInOut,
+      );
     }
 
     await photoRepository!.deletePhoto(photo);

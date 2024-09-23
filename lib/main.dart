@@ -11,7 +11,6 @@ Future<void> main() async {
   //flutterの初期化処理
   WidgetsFlutterBinding.ensureInitialized();
   await dotenv.load(fileName: ".env");
-  print(dotenv.env['API_KEY']);
   if (Firebase.apps.isEmpty) {
     //firebase初期化
     await Firebase.initializeApp(
@@ -42,7 +41,7 @@ class MyApp extends StatelessWidget {
             //ユーザー情報の取得
             final asyncUser = ref.watch(userProvider);
             return asyncUser.when(data: (User? data) {
-              return data == null ? SignInScreen() : PhotoListScreen();
+              return data == null ? const SignInScreen() : const PhotoListScreen();
             }, loading: () {
               return const Scaffold(
                   body: Center(child: CircularProgressIndicator()));
