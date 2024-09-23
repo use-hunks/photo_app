@@ -79,7 +79,23 @@ class _PhotoListScreenState extends ConsumerState<PhotoListScreen> {
     //ログインしているユーザーの情報を取得
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Photo App"),
+        title: Row(
+          children: [
+            const Text("Photo App"),
+            SizedBox(width: 10,),
+            Expanded(
+              child: Padding(
+                padding: const EdgeInsets.only(right: 16.0),
+                child: Text(
+                    FirebaseAuth.instance.currentUser?.email ?? "ゲスト",
+                    overflow: TextOverflow.ellipsis, //テキストが幅を超えるとき省略記号を示す
+                    maxLines: 1,
+                    textAlign: TextAlign.right,
+                    style: const TextStyle(fontSize: 16)),
+              ),
+            )
+          ],
+        ),
         actions: [
           //ログアウトのボタンを右上に配置
           IconButton(
@@ -197,8 +213,10 @@ class PhotoGridView extends StatelessWidget {
               alignment: Alignment.topRight,
               child: IconButton(
                 onPressed: () => onTapFav(photo), //TODO: お気に入りボタンを押した後の処理
-                color:  photo.isFavorite ? Colors.pink : Colors.white,
-                icon: photo.isFavorite ? const Icon(Icons.favorite): const Icon(Icons.favorite_border),
+                color: photo.isFavorite ? Colors.pink : Colors.white,
+                icon: photo.isFavorite
+                    ? const Icon(Icons.favorite)
+                    : const Icon(Icons.favorite_border),
               ),
             )
           ],
