@@ -51,10 +51,11 @@ class _PhotoListScreenState extends ConsumerState<PhotoListScreen> {
 
   Future<void> _onSignOut() async {
     await FirebaseAuth.instance.signOut();
+    if (!mounted) return;
     //ログアウトに成功したらログイン画面に戻る
     if (context.mounted) {
       Navigator.of(context).pushReplacement(MaterialPageRoute(
-        builder: (_) => SignInScreen(),
+        builder: (_) => const SignInScreen(),
       ));
     }
   }

@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:photoapp/view/photo_list_screen.dart';
 
 class SignInScreen extends StatefulWidget {
+  const SignInScreen({super.key});
+
   @override
   _SignInScreenState createState() => _SignInScreenState();
 }
@@ -88,17 +90,15 @@ class _SignInScreenState extends State<SignInScreen> {
         //エラーメッセージがあるため処理を中断する = 押しても意味がない
         return;
       }
-
       final String email = _emailController.text;
       final String password = _passwordController.text;
       await FirebaseAuth.instance
           .signInWithEmailAndPassword(email: email, password: password);
-
-      //画像一覧画面に切り替え 
-      // 戻る必要がないのでpushReplacementを使う
+      //画像一覧画面に切り替え
+      if (!mounted) return;
       Navigator.of(context).pushReplacement(
         MaterialPageRoute(
-          builder: (_) => PhotoListScreen(),
+          builder: (_) => const PhotoListScreen(),
         ),
       );
     } catch (e) {
@@ -107,7 +107,7 @@ class _SignInScreenState extends State<SignInScreen> {
           context: context,
           builder: (context) {
             return AlertDialog(
-              title: Text("エラー"),
+              title: const Text("エラー"),
               content: Text(e.toString()),
             );
           });
@@ -124,11 +124,11 @@ class _SignInScreenState extends State<SignInScreen> {
       final String password = _passwordController.text;
       await FirebaseAuth.instance
           .createUserWithEmailAndPassword(email: email, password: password);
-
+      if (!mounted) return;
       //画像一覧表示に切り替え
       Navigator.of(context).pushReplacement(
         MaterialPageRoute(
-          builder: (_) => PhotoListScreen(),
+          builder: (_) => const PhotoListScreen(),
         ),
       );
     } catch (e) {
@@ -137,7 +137,7 @@ class _SignInScreenState extends State<SignInScreen> {
           context: context,
           builder: (context) {
             return AlertDialog(
-              title: Text("エラー"),
+              title: const Text("エラー"),
               content: Text(e.toString()),
             );
           });
