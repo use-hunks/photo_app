@@ -15,10 +15,10 @@ class PhotoListScreen extends ConsumerStatefulWidget {
   const PhotoListScreen({super.key});
 
   @override
-  _PhotoListScreenState createState() => _PhotoListScreenState();
+  PhotoListScreenState createState() => PhotoListScreenState();
 }
 
-class _PhotoListScreenState extends ConsumerState<PhotoListScreen> {
+class PhotoListScreenState extends ConsumerState<PhotoListScreen> {
   late PageController _controller;
 
   @override

@@ -10,10 +10,10 @@ class PhotoViewScreen extends ConsumerStatefulWidget {
   });
 
   @override
-  _PhotoViewScreenState createState() => _PhotoViewScreenState();
+  PhotoViewScreenState createState() => PhotoViewScreenState();
 }
 
-class _PhotoViewScreenState extends ConsumerState<PhotoViewScreen> {
+class PhotoViewScreenState extends ConsumerState<PhotoViewScreen> {
   late PageController _controller;
 
   @override
