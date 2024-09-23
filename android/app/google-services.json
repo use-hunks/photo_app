@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "508043520853",
+    "project_id": "photo-app-fd168",
+    "storage_bucket": "photo-app-fd168.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:508043520853:android:debe84eedb6295fb8c9ddc",
+        "android_client_info": {
+          "package_name": "com.usehunks.photoapp"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDZIZWpcCu_yNvtBWAcXSr17Z4GXHOrdfY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
