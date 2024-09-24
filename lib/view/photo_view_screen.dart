@@ -95,7 +95,7 @@ class PhotoViewScreenState extends ConsumerState<PhotoViewScreen> {
                         children: photoList.map((Photo photo) {
                           return Image.network(
                             photo.imageURL,
-                            fit: BoxFit.cover,
+                            fit: BoxFit.contain,
                           );
                         }).toList());
                   },
