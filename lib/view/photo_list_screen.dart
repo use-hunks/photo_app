@@ -80,6 +80,28 @@ class PhotoListScreenState extends ConsumerState<PhotoListScreen> {
     await photoRepository!.updatePhoto(toggledPhoto);
   }
 
+  void _showSignOutConfirmationDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text("サインアウト"),
+        content: const Text("本当にサインアウトしますか？"),
+        actions: <Widget>[
+          TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: const Text("キャンセル")),
+          ElevatedButton(
+              onPressed: () {
+                _onSignOut();
+              },
+              child: const Text("OK"))
+        ],
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     //ログインしているユーザーの情報を取得
@@ -104,7 +126,9 @@ class PhotoListScreenState extends ConsumerState<PhotoListScreen> {
         actions: [
           //ログアウトのボタンを右上に配置
           IconButton(
-            onPressed: () => _onSignOut(),
+            onPressed: () {
+              _showSignOutConfirmationDialog(context);
+            },
             icon: const Icon(Icons.exit_to_app),
           )
         ],

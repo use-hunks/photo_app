@@ -49,6 +49,31 @@ class PhotoViewScreenState extends ConsumerState<PhotoViewScreen> {
     await photoRepository!.deletePhoto(photo);
   }
 
+  void _showDeleteConfirmationDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text("削除"),
+        content: const Text("本当に写真を削除しますか？"),
+        actions: <Widget>[
+          TextButton(
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+            child: const Text("キャンセル"),
+          ),
+          ElevatedButton(
+            onPressed: () {
+              _onTapDelete();
+              Navigator.of(context).pop();
+            },
+            child: const Text("OK"),
+          ),
+        ],
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -97,11 +122,13 @@ class PhotoViewScreenState extends ConsumerState<PhotoViewScreen> {
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: [
                       IconButton(
-                          onPressed: () => _onTapShare,
+                          onPressed: _onTapShare,
                           color: Colors.white,
                           icon: const Icon(Icons.share)),
                       IconButton(
-                          onPressed: () => _onTapDelete,
+                          onPressed: () {
+                            _showDeleteConfirmationDialog(context);
+                          },
                           color: Colors.white,
                           icon: const Icon(Icons.delete))
                     ],
