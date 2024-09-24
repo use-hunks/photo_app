@@ -1,10 +1,10 @@
 import 'dart:io';
-import 'dart:developer' as developer;
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:logger/logger.dart';
 import 'package:photoapp/photo.dart';
 import 'package:photoapp/photo_repository.dart';
 import 'package:photoapp/providers.dart';
@@ -199,16 +199,17 @@ class PhotoGridView extends StatelessWidget {
   final void Function(Photo photo) onTap; //コールバック関数の定義
   final void Function(Photo photo) onTapFav;
 
-  const PhotoGridView({
+  PhotoGridView({
     super.key,
     required this.photoList,
     required this.onTap,
     required this.onTapFav,
   });
 
+  final logger = Logger();
   @override
   Widget build(BuildContext context) {
-    developer.log('PhotoList length: ${photoList.length}');
+    logger.i('PhotoList length: ${photoList.length}');
     return GridView.count(
       crossAxisCount: 2,
       mainAxisSpacing: 8,
