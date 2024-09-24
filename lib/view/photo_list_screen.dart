@@ -1,10 +1,10 @@
 import 'dart:io';
-import 'dart:developer' as developer;
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:logger/logger.dart';
 import 'package:photoapp/photo.dart';
 import 'package:photoapp/photo_repository.dart';
 import 'package:photoapp/providers.dart';
@@ -39,14 +39,14 @@ class PhotoListScreenState extends ConsumerState<PhotoListScreen> {
     ref.read(photoListIndexProvider.notifier).state = index;
   }
 
-  void _onTapPhoto(Photo photo, List<Photo> photoList) {
-    // XXX: この処理理解する
+  void _onTapPhoto(Photo photo, List<Photo> photoList, bool isFavorite) {
+    // 引数のphotoListをfavの場合, favoritePhotoListで受けとる
     final initialIndex = photoList.indexOf(photo);
     //最初に表示する画像のURLを指定して、画像詳細画面に切り替え
     Navigator.of(context).push(MaterialPageRoute(
         builder: (_) => ProviderScope(overrides: [
               photoViewInitialIndexProvider.overrideWithValue(initialIndex)
-            ], child: const PhotoViewScreen())));
+            ], child:  PhotoViewScreen(isFavorite: isFavorite))));
   }
 
   Future<void> _onSignOut() async {
@@ -144,7 +144,7 @@ class PhotoListScreenState extends ConsumerState<PhotoListScreen> {
                 return asyncPhotoList.when(data: (List<Photo> photoList) {
                   return PhotoGridView(
                     photoList: photoList,
-                    onTap: (photo) => _onTapPhoto(photo, photoList),
+                    onTap: (photo) => _onTapPhoto(photo, photoList, false),
                     onTapFav: (photo) => _onTapFav(photo),
                   );
                 }, loading: () {
@@ -163,7 +163,7 @@ class PhotoListScreenState extends ConsumerState<PhotoListScreen> {
                   data: (List<Photo> photoList) {
                     return PhotoGridView(
                         photoList: photoList,
-                        onTap: (photo) => _onTapPhoto(photo, photoList),
+                        onTap: (photo) => _onTapPhoto(photo, photoList, true),
                         onTapFav: (photo) => _onTapFav(photo));
                   },
                   orElse: () =>
@@ -199,16 +199,17 @@ class PhotoGridView extends StatelessWidget {
   final void Function(Photo photo) onTap; //コールバック関数の定義
   final void Function(Photo photo) onTapFav;
 
-  const PhotoGridView({
+  PhotoGridView({
     super.key,
     required this.photoList,
     required this.onTap,
     required this.onTapFav,
   });
 
+  final logger = Logger();
   @override
   Widget build(BuildContext context) {
-    developer.log('PhotoList length: ${photoList.length}');
+    logger.i('PhotoList length: ${photoList.length}');
     return GridView.count(
       crossAxisCount: 2,
       mainAxisSpacing: 8,
