@@ -7,8 +7,10 @@ import 'package:share_plus/share_plus.dart';
 class PhotoViewScreen extends ConsumerStatefulWidget {
   const PhotoViewScreen({
     super.key,
+    required this.isFavorite
   });
 
+  final bool isFavorite;
   @override
   PhotoViewScreenState createState() => PhotoViewScreenState();
 }
@@ -86,7 +88,7 @@ class PhotoViewScreenState extends ConsumerState<PhotoViewScreen> {
         body: Stack(
           children: [
             Consumer(builder: (context, ref, child) {
-              final asyncPhotoList = ref.watch(photoListProvider);
+              final asyncPhotoList = widget.isFavorite ? ref.watch(favoritePhotoListProvider) : ref.watch(photoListProvider);
               return asyncPhotoList.when(
                   data: (photoList) {
                     return PageView(

@@ -39,14 +39,14 @@ class PhotoListScreenState extends ConsumerState<PhotoListScreen> {
     ref.read(photoListIndexProvider.notifier).state = index;
   }
 
-  void _onTapPhoto(Photo photo, List<Photo> photoList) {
-    // XXX: この処理理解する
+  void _onTapPhoto(Photo photo, List<Photo> photoList, bool isFavorite) {
+    // 引数のphotoListをfavの場合, favoritePhotoListで受けとる
     final initialIndex = photoList.indexOf(photo);
     //最初に表示する画像のURLを指定して、画像詳細画面に切り替え
     Navigator.of(context).push(MaterialPageRoute(
         builder: (_) => ProviderScope(overrides: [
               photoViewInitialIndexProvider.overrideWithValue(initialIndex)
-            ], child: const PhotoViewScreen())));
+            ], child:  PhotoViewScreen(isFavorite: isFavorite))));
   }
 
   Future<void> _onSignOut() async {
@@ -144,7 +144,7 @@ class PhotoListScreenState extends ConsumerState<PhotoListScreen> {
                 return asyncPhotoList.when(data: (List<Photo> photoList) {
                   return PhotoGridView(
                     photoList: photoList,
-                    onTap: (photo) => _onTapPhoto(photo, photoList),
+                    onTap: (photo) => _onTapPhoto(photo, photoList, false),
                     onTapFav: (photo) => _onTapFav(photo),
                   );
                 }, loading: () {
@@ -163,7 +163,7 @@ class PhotoListScreenState extends ConsumerState<PhotoListScreen> {
                   data: (List<Photo> photoList) {
                     return PhotoGridView(
                         photoList: photoList,
-                        onTap: (photo) => _onTapPhoto(photo, photoList),
+                        onTap: (photo) => _onTapPhoto(photo, photoList, true),
                         onTapFav: (photo) => _onTapFav(photo));
                   },
                   orElse: () =>
