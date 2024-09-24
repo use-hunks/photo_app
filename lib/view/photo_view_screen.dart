@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:photoapp/photo.dart';
 import 'package:photoapp/providers.dart';
-//import 'package:share_plus/share_plus.dart';
+import 'package:share_plus/share_plus.dart';
 
 class PhotoViewScreen extends ConsumerStatefulWidget {
   const PhotoViewScreen({
@@ -24,11 +24,10 @@ class PhotoViewScreenState extends ConsumerState<PhotoViewScreen> {
   }
 
   //共有
-  // FIXME: build errorを引き起こす。javaのバージョンのせいか？
   Future<void> _onTapShare() async {
     final photoList = ref.read(photoListProvider).value ?? [];
     final photo = photoList[_controller.page!.toInt()];
-    //await Share.share(photo.imageURL);
+    await Share.share(photo.imageURL);
   }
 
   //削除
